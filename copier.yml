@@ -1,0 +1,119 @@
+# CONFIGURATION --------------------------
+_min_copier_version: "9"
+_subdirectory: template
+_templates_suffix: jinja
+_jinja_extensions:
+  - copier_templates_extensions.TemplateExtensionLoader
+  - extensions.py:TemplateDefaultExtension
+_message_before_copy: |
+  Thanks for generating a project with the numpy template.
+  
+  You will be asked a series of questions to generate a 
+  tailored project for you.
+_message_after_copy: |
+  You project "{{ project_name }}" has been created successfully!
+_message_before_update: |
+  Thanks for updating your project using the numpy template.
+  
+  You will be asked a series of questions whose answers are
+  pre-populated with previously entered values. Feel free to
+  change them as needed.
+_message_after_update: | 
+  Your project "{{ project_name }}" has been updated successfully!
+  In case there are any conflicts, please resolve them.
+
+# POST COPY TASKS-------------------------
+_tasks:
+  - pdm install
+
+# PROMPT ---------------------------------
+project_name:
+  type: str
+  help: "Enter your project name:"
+  default: "{{ project_dir }}"
+
+project_description:
+  type: str
+  help: "Enter a project description:"
+
+author_name:
+  type: str
+  help: "Enter your full name:"
+  default: "{{ git_user_name }}"
+
+author_email:
+  type: str
+  help: "Enter your email:"
+  default: "{{ git_user_email }}"
+
+repository_namespace:
+  type: str
+  help: "Enter your repository namespace (e.g. your username/org on GitHub):"
+  default: "{{ git_username }}"
+
+is_distributable:
+  type: bool
+  help: "Do you want to build this project as a package for distribution (e.g. pip install)?"
+  default: false
+
+distribution_name:
+  type: str
+  help: "Your Python package distribution name (for `pip install NAME`):"
+  default: "{{ project_name | slugify }}"
+  when: "{{ is_distributable }}"
+
+import_name:
+  type: str
+  help: "Your Python package import name (for `import NAME`):"
+  default: "{{ project_name | slugify('_') }}"
+  when: "{{ is_distributable }}"
+
+copyright_license:
+  type: str
+  help: "Choose a license:"
+  default: "MIT"
+  choices:
+    - AFL-3.0
+    - Apache-2.0
+    - Artistic-2.0
+    - BSD-2-Clause
+    - BSD-3-Clause
+    - BSD-4-Clause
+    - BSL-1.0
+    - CC-BY-4.0
+    - WTFPL
+    - ECL-2.0
+    - EPL-2.0
+    - EUPL-1.1
+    - AGPL-3.0
+    - GPL-2.0
+    - GPL-3.0
+    - LGPL-2.1
+    - LGPL-3.0
+    - ISC
+    - LPPL-1.3c
+    - MS-PL
+    - MIT
+    - OSL-3.0
+    - Unlicense
+    - Zlib
+
+requires_python:
+  type: str
+  help: "Enter a specifier string for supported Python versions:"
+  default: ">=3.11"
+
+python_version: # Pretty version string variable (e.g. 3.11+)
+  type: str
+  default: "{{ requires_python | format_python_version }}"
+  when: false
+
+include_docs:
+  type: bool
+  help: "Do you want to include documentation for your project?"
+  default: false
+
+include_cicd:
+  type: bool
+  help: "Do you want to include a CI/CD workflow (e.g. pytest, GitHub actions)?"
+  default: false

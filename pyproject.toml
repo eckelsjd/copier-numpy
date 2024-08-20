@@ -1,0 +1,32 @@
+[project]
+name = "copier-numpy"
+version = "0.1.0"
+description = "Template for a numpy-based scientific computing Python package."
+authors = [
+    {name = "Joshua Eckels", email = "eckelsjd@umich.edu"},
+]
+dependencies = []
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm.scripts]
+bump = "cz bump {args}"
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "commitizen>=3.29.0",
+    "pre-commit>=3.8.0",
+]
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+tag_format = "v$version"
+version_scheme = "pep440"
+version_provider = "pep621"
+update_changelog_on_bump = true
+major_version_zero = true
+changelog_file = "CHANGELOG.md"

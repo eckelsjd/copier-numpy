@@ -1,0 +1,84 @@
+[project]
+name = "{{ distribution_name }}"
+version = "0.1.0"
+description = "{{ project_description }}"
+authors = [
+    {name = "{{ author_name }}", email = "{{ author_email }}"},
+]
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.14",
+    "matplotlib>=3.9",
+    "joblib>=1.4"
+]
+requires-python = "{{ requires_python }}"
+readme = "README.md"
+license = {text = "{{ copyright_license }}"}
+keywords = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research"
+]
+
+[project.urls]
+Repository = "https://github.com/{{ repository_namespace }}/{{ project_name }}.git"
+{% if include_docs %}Documentation = "https://{{ repository_namespace }}.github.io/{{ project_name }}/"{% endif %}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.pdm]
+{% if is_distributable %}distribution = true{% else %}distribution = false{% endif %}
+
+{% if include_cicd %}[tool.ruff.lint]
+select = ['E', 'F', 'I']
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["*.ipynb"]
+
+[tool.commitizen]
+version_scheme = "pep440"
+version_provider = "pep621"
+version_files = ["src/{{ import_name }}.__init__.py:__version__"]
+update_changelog_on_bump = true
+tag_format = "v$version"
+changelog_file = "CHANGELOG.md"
+changelog_incremental = true
+changelog_merge_prerelease = true
+major_version_zero = true
+post_bump_hooks = []{% endif %}
+
+[tool.pdm.scripts]
+copier = "python _copier_cli.py {args}"
+setup_github = '{{ github_setup_cmd }}'
+{% if include_cicd %}test = "pytest --cov={{ import_name }} --cov-report html:htmlcov tests"{% endif %}
+{% if include_docs %}docs = "mkdocs serve"{% endif %}
+{% if include_cicd %}bump = "cz bump {args}"{% endif %}
+{% if include_cicd %}lint = "ruff check src tests {args}"{% endif %}
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "copier>=9.3"
+]
+{% if include_cicd %}cicd = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.6",
+    "pre-commit>=3.8",
+    "commitizen>=3.29"
+]{% endif %}
+{% if include_docs %}doc = [
+    "mkdocs>=1.5",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.24",
+    "markdown-exec[ansi]>=1.9",
+    "mkdocs-gen-files>=0.5",
+    "mkdocs-literate-nav>=0.6",
+    "mkdocs-redirects>=1.2",
+    "mkdocs-git-committers-plugin-2>=2.3",
+    "mkdocs-git-revision-date-localized-plugin>=1.2",
+    "mkdocs-coverage>=1.0",
+]{% endif %}

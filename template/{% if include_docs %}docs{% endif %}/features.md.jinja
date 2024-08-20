@@ -1,0 +1,142 @@
+Here are some of the cool `mkdocs` features included by default in this template.
+
+## UML class diagrams
+
+``` mermaid
+classDiagram
+    class MyClass {
+      +list[OtherClass] components
+      +int another_property
+      +my_method()
+    }
+    class OtherClass {
+      +Array indices
+      +activate_index(idx)
+    }
+    MyClass o-- "1..n" OtherClass
+```
+
+## File trees
+Can make nice file tree structures using the [markdown-exec](https://github.com/pawamoy/markdown-exec) plugin, which also has other cool features such as running actual code within the markdown file.
+
+```tree
+project
+  src
+    hello.py
+    goodbye.py
+  README.md
+  pyproject.toml
+```
+
+## Syntax highlighting
+This code block illustrates many cool things you can do to show example code:
+```python title="Fibonacci sequence" linenums="1" hl_lines="7-8"
+def fibonacci(n):
+    """Returns the n-th term in the Fibonacci sequence."""
+    if n <= 0:
+        return 0  # Base case: F[0] = 0 (1)
+    elif n == 1:
+        return 1  # Base case: F[1] = 1
+    else:
+        return fibonacci(n - 1) + fibonacci(n - 2)
+```
+
+1. Improve this with memoization:
+```python
+def fibonacci_memoization(n, memo={}):
+    """Returns the n-th term in the Fibonacci sequence using memoization."""
+    if n in memo:
+        return memo[n]
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        memo[n] = fibonacci_memoization(n - 1, memo) + fibonacci_memoization(n - 2, memo)
+        return memo[n]
+```
+
+## Snippets
+Here is an example of how to cut and paste from your source code directly into the documentation.
+=== "Markdown"
+    ````markdown
+    ```python title="example.py"
+    ;--8<-- "{{ import_name }}/example.py:example_name"
+    ```
+    ````
+=== "Result"
+    ```python title="example.py"
+    --8<-- "{{ import_name }}/example.py:example_name"
+    ```
+
+## Latex equations
+You can use normal inline Latex math mode: $y=f(x)$, or you can show more elaborate equations in block mode:
+
+$$
+\begin{align}
+    p(\theta\mid y) &= \frac{p(y\mid\theta) p(\theta)}{p(y)} \\
+                    &\propto \int_\phi p(y\mid\theta, \phi)p(\theta\mid\phi)p(\phi)\mathrm{d}\phi
+\end{align}
+$$
+
+## Callouts (admonitions)
+There are several [callout](https://squidfunk.github.io/mkdocs-material/reference/admonitions/) options available:
+
+!!! note "A note callout"
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
+    massa, nec semper lorem quam in massa.
+
+!!! example "An example callout"
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
+    massa, nec semper lorem quam in massa.
+
+!!! warning "A warning callout"
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod
+    nulla. Curabitur feugiat, tortor non consequat finibus, justo purus auctor
+    massa, nec semper lorem quam in massa.
+
+
+## Tabbed display
+=== "Markdown"
+    ```markdown
+    === "Left tab"
+        Some left text
+    === "Right tab"
+        Some right text
+    ```
+=== "Result"
+    === "Left tab"
+        Some left text
+    === "Right tab"
+        Some right text
+
+## Git information
+See the bottom of this very page for the result of the `git` plugins that show author contributions and dates. This uses `mkdocs-git-committers-plugin-2` and `mkdocs-git-revision-date-localized-plugin`.
+
+## Automatic API reference
+See the holy :dove: combination of the `gen-files`, `literate-nav`, and `mkdocstrings` plugins in action. All you need to do is write good docstrings in your Python code and the whole API reference tab will be constructed for you (and kept up to date with your code).
+
+Honestly, your whole documentation website could just be this for starters and that is infinitely better than many projects can say.
+
+## Abbreviations, icons, emojis, and tooltips
+All abbreviations defined in `abbreviations.md` are automatically detected anywhere in your documentation. Hover over HTML to find out what it means!
+
+You can add this hovering "tooltip" to almost anything by adding the `title` CSS attribute to it, such as this icon: :material-information-outline:{ title="You have discovered another tooltip, congrats" } via
+```shell
+:material-information-outline:{ title="A tooltip" }
+```
+
+There are also loads of other icons and emojis you can choose from :smile: :material-github: :thumbsup: :material-information: :fontawesome-solid-poop:. You can search them all [here](https://squidfunk.github.io/mkdocs-material/reference/icons-emojis/).
+
+You can also add annotations (1) to provide more detail about something in a hover tooltip window.
+{ .annotate }
+
+1.
+``` markdown title="How to add annotations"
+You can also add annotations (1) to provide more detail...
+{ .annotate }
+
+1.  Here is the body of the annotation.
+```

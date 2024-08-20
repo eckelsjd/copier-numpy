@@ -1,0 +1,51 @@
+{% if include_docs %}![Logo](https://raw.githubusercontent.com/{{repository_namespace}}/{{ project_name }}/main/docs/assets/logo.svg){% else %}
+# {{ project_name }}{% endif %}
+[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm-project.org)
+[![Python version](https://img.shields.io/badge/python-{{ python_version }}-blue.svg?logo=python&logoColor=cccccc)](https://www.python.org/downloads/)
+[![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/eckelsjd/copier-numpy)
+{% if is_distributable %} [![PyPI](https://img.shields.io/pypi/v/{{ distribution_name }}?logo=python&logoColor=%23cccccc)](https://pypi.org/project/{{ distribution_name }})
+![build](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/deploy.yml?logo=github) {% endif %}
+{% if include_docs %}![docs](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/docs.yml?logo=materialformkdocs&logoColor=%2523cccccc&label=docs) {% endif %}
+{% if include_cicd %}![tests](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/tests.yml?logo=github&logoColor=%2523cccccc&label=tests)
+![Code Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?logo=codecov)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org) {% endif %}
+
+[//]: # (You will need to register your Github repo with trusted publishing on PyPI if desired: https://docs.pypi.org/trusted-publishers/)
+
+{{ project_description }}
+
+{% if is_distributable %}
+## Installation
+```shell
+pip install {{ distribution_name }}
+```
+If you are using [pdm](https://github.com/pdm-project/pdm) in your own project, then you can use:
+```shell
+pdm add {{ distribution_name }}
+
+# Or in editable mode from a local clone...
+pdm add -e ./{{ distribution_name }} --dev
+```
+{% endif %}
+
+## Quickstart
+```python
+import {{ import_name }}
+
+{{ import_name }}.demonstrate_basic_usage()
+
+print('Wow!')
+```
+
+{% if is_distributable %}
+## Contributing
+See the [contribution](https://github.com/{{ repository_namespace }}/{{ project_name }}/blob/main/CONTRIBUTING.md) guidelines.
+{% endif %}
+
+## Citations
+Include any additional references for your project.
+
+<sup><sub>Made with the [copier-numpy](https://github.com/eckelsjd/copier-numpy.git) template.</sub></sup>
+
