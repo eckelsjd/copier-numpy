@@ -11,7 +11,7 @@ readme = "README.md"
 license = {text = "MIT"}
 
 [tool.pdm.scripts]
-bump = "cz bump {args}"
+bump = "cz bump {args} --changelog-to-stdout > RELEASE.md"
 
 [tool.pdm]
 distribution = false
@@ -28,5 +28,9 @@ tag_format = "v$version"
 version_scheme = "pep440"
 version_provider = "pep621"
 update_changelog_on_bump = true
+changelog_incremental = true
+changelog_merge_prerelease = true
 major_version_zero = true
 changelog_file = "CHANGELOG.md"
+annotated_tag = true
+post_bump_hooks = ["git push --follow-tags"]

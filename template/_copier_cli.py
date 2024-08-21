@@ -1,6 +1,5 @@
 """Run copier CLI from its Python interface (copier is installed in .venv)"""
 from copier.cli import CopierApp
-import shlex
 import sys
 
 

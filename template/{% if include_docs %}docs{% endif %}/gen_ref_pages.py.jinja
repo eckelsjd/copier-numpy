@@ -1,5 +1,6 @@
 """Generate the code reference pages and navigation."""
 from pathlib import Path
+import sys
 
 import mkdocs_gen_files
 
@@ -8,6 +9,9 @@ import_name = "{{ import_name }}"
 nav_file = "SUMMARY.md"
 root = Path(__file__).parent.parent
 src = root / "src" / import_name
+
+if not src.exists():
+    sys.exit(0)
 
 for path in sorted(src.rglob("*.py")):
     module_path = path.relative_to(src).with_suffix("")

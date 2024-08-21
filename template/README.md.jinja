@@ -3,14 +3,14 @@
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm-project.org)
 [![Python version](https://img.shields.io/badge/python-{{ python_version }}-blue.svg?logo=python&logoColor=cccccc)](https://www.python.org/downloads/)
 [![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-orange.json)](https://github.com/eckelsjd/copier-numpy)
-{% if is_distributable %} [![PyPI](https://img.shields.io/pypi/v/{{ distribution_name }}?logo=python&logoColor=%23cccccc)](https://pypi.org/project/{{ distribution_name }})
-![build](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/deploy.yml?logo=github) {% endif %}
-{% if include_docs %}![docs](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/docs.yml?logo=materialformkdocs&logoColor=%2523cccccc&label=docs) {% endif %}
-{% if include_cicd %}![tests](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/tests.yml?logo=github&logoColor=%2523cccccc&label=tests)
-![Code Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?logo=codecov)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org) {% endif %}
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
+{% if is_distributable and include_cicd %} [![PyPI](https://img.shields.io/pypi/v/{{ distribution_name }}?logo=python&logoColor=%23cccccc)](https://pypi.org/project/{{ distribution_name }})
+![build](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/deploy.yml?logo=github) {% endif %}
+{% if include_docs and include_cicd %}![docs](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/docs.yml?logo=materialformkdocs&logoColor=%2523cccccc&label=docs) {% endif %}
+{% if is_distributable and include_cicd %}![tests](https://img.shields.io/github/actions/workflow/status/{{repository_namespace}}/{{ project_name }}/tests.yml?logo=github&logoColor=%2523cccccc&label=tests) {% endif %}
+{% if is_distributable %}![Code Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?logo=codecov){% endif %}
 
 [//]: # (You will need to register your Github repo with trusted publishing on PyPI if desired: https://docs.pypi.org/trusted-publishers/)
 

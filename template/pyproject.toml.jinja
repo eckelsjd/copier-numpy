@@ -20,19 +20,20 @@ classifiers = [
     "Operating System :: OS Independent",
     "Intended Audience :: Science/Research"
 ]
-
+{% if init_github or include_docs %}
 [project.urls]
-Repository = "https://github.com/{{ repository_namespace }}/{{ project_name }}.git"
+{% if init_github %}Repository = "https://github.com/{{ repository_namespace }}/{{ project_name }}.git"{% endif %}
 {% if include_docs %}Documentation = "https://{{ repository_namespace }}.github.io/{{ project_name }}/"{% endif %}
-
+{% endif %}
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm]
-{% if is_distributable %}distribution = true{% else %}distribution = false{% endif %}
+{% if is_distributable %}distribution = true
+{% else %}distribution = false{% endif %}
 
-{% if include_cicd %}[tool.ruff.lint]
+[tool.ruff.lint]
 select = ['E', 'F', 'I']
 
 [tool.ruff]
@@ -42,33 +43,35 @@ extend-exclude = ["*.ipynb"]
 [tool.commitizen]
 version_scheme = "pep440"
 version_provider = "pep621"
-version_files = ["src/{{ import_name }}.__init__.py:__version__"]
+version_files = [{% if is_distributable %}"src/{{ import_name }}.__init__.py:__version__"{% endif %}]
 update_changelog_on_bump = true
 tag_format = "v$version"
 changelog_file = "CHANGELOG.md"
 changelog_incremental = true
 changelog_merge_prerelease = true
 major_version_zero = true
-post_bump_hooks = []{% endif %}
+annotated_tag = true
+post_bump_hooks = ["git push --follow-tags"]
 
 [tool.pdm.scripts]
+bump = "cz bump {args} --changelog-to-stdout > RELEASE.md"
 copier = "python _copier_cli.py {args}"
-setup_github = '{{ github_setup_cmd }}'
-{% if include_cicd %}test = "pytest --cov={{ import_name }} --cov-report html:htmlcov tests"{% endif %}
+{% if init_github %}setup_github = '{{ github_setup_cmd }}'
+{% else %}setup_github = 'clear'{% endif %}
+{% if is_distributable %}test = "pytest --cov={{ import_name }} --cov-report html:htmlcov tests"{% endif %}
 {% if include_docs %}docs = "mkdocs serve"{% endif %}
-{% if include_cicd %}bump = "cz bump {args}"{% endif %}
-{% if include_cicd %}lint = "ruff check src tests {args}"{% endif %}
+{% if is_distributable %}lint = "ruff check src tests {args}"{% endif %}
 
 [tool.pdm.dev-dependencies]
 dev = [
-    "copier>=9.3"
-]
-{% if include_cicd %}cicd = [
-    "pytest>=7.4",
-    "pytest-cov>=4.1",
+    "copier>=9.3",
     "ruff>=0.6",
     "pre-commit>=3.8",
     "commitizen>=3.29"
+]
+{% if is_distributable %}test = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
 ]{% endif %}
 {% if include_docs %}doc = [
     "mkdocs>=1.5",

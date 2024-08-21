@@ -37,14 +37,15 @@ pdm init --copier gh:eckelsjd/copier-numpy --trust --vcs-ref=HEAD
 All extra arguments are passed to `copier copy` (you're also welcome to just use `copier` directly).
 
 ## Publishing on PyPI
-If you want to make your package available on [PyPI](https://pypi.org) (e.g. for `pip install your-package`), follow [this tutorial](https://docs.pypi.org/trusted-publishers/) to enable trusted publishing with Github actions. Then, do:
+Follow [this tutorial](https://docs.pypi.org/trusted-publishers/) to enable trusted publishing with Github actions. Then, do:
 ```shell
 pdm bump
 ```
-That's it! Your package will automatically deploy with a `vX.X.X` tag (PEP440) to PyPi and Github.
+That's it! Your package will automatically deploy to PyPi and Github with a correctly-versioned `vX.X.X` tag.
 
 ## See similar
 - [Scientific Python library development](https://github.com/scientific-python/cookie)
 - [Copier-pdm](https://github.com/pawamoy/copier-pdm) and the similar [pdm-project](https://github.com/pdm-project/copier-pdm) version
 - [Serious scaffolding](https://github.com/serious-scaffold/ss-python) for Python projects
 - [LINCC framework](https://github.com/lincc-frameworks/python-project-template) for Python projects by the University of Washington
+- [copier-pylib](https://github.com/astrojuanlu/copier-pylib) for pure Python projects

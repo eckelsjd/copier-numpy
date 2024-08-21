@@ -84,13 +84,16 @@ nav:
       - Getting started: start.md
       - Tutorials: tutorials.md
       - How-to Guides: how-to-guides.md
+      {% if is_distributable %}
       - Contributing: contributing.md
       - Coverage report: coverage.md
+      {% endif %}
       - Changelog: changelog.md
   - API reference:
-      - {{ import_name }}: reference/index.md  # Must be named "index.md" for section title to be clickable
       - Documentation features: features.md
-      - reference/*         # Wildcard for auto-generated reference pages (gen-files + literate-nav)
+      {% if is_distributable %}
+      - {{ import_name }}: reference/index.md  # Must be named "index.md" for section title to be clickable
+      - reference/*         # Wildcard for auto-generated reference pages (gen-files + literate-nav) {% endif %}
   - Theory:
       - Overview: theory.md
 

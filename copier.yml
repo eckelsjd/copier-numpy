@@ -25,6 +25,7 @@ _message_after_update: |
 # POST COPY TASKS-------------------------
 _tasks:
   - pdm install
+  - pdm setup_github
 
 # PROMPT ---------------------------------
 project_name:
@@ -113,7 +114,13 @@ include_docs:
   help: "Do you want to include documentation for your project?"
   default: false
 
+init_github:
+  type: bool
+  help: "Do you want to set up a git repository and push to GitHub?"
+  default: true
+
 include_cicd:
   type: bool
-  help: "Do you want to include a CI/CD workflow (e.g. pytest, GitHub actions)?"
+  help: "Do you want to include a CI/CD workflow (e.g. GitHub actions)?"
   default: false
+  when: "{{ init_github }}"
