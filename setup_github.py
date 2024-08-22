@@ -27,11 +27,11 @@ def install_gh_cli():
     """Installs GitHub CLI (gh) based on the operating system."""
     try:
         run_command("gh --version")
-        print("GitHub CLI is already installed.")
+        print("> GitHub CLI is already installed.")
     except RuntimeError:
-        print("Installing GitHub CLI...")
+        print("> Installing GitHub CLI...")
         if PLATFORM == "linux":
-            print('Attempt Linux install of GitHub CLI...')
+            print('> Attempt Linux install of GitHub CLI...')
             distro = platform.linux_distribution()[0].lower()
             if "ubuntu" in distro or "debian" in distro:
                 run_command("(type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y))")
@@ -48,14 +48,14 @@ def install_gh_cli():
             else:
                 raise NotImplementedError(f"Unsupported Linux distribution: {distro}")
         elif PLATFORM == "darwin":
-            print('Attempt MacOS install of Github CLI...')
+            print('> Attempt MacOS install of Github CLI...')
             try:
                 run_command("brew --version")
             except RuntimeError:
                 run_command('/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"')
             run_command("brew install gh")
         elif PLATFORM == 'windows':
-            print('Attempt Windows install of Github CLI...')
+            print('> Attempt Windows install of Github CLI...')
             try:
                 run_command(f'scoop --version')
             except RuntimeError:
@@ -67,13 +67,13 @@ def install_gh_cli():
         else:
             raise NotImplementedError(f"Unsupported operating system: {PLATFORM}")
 
-        print("GitHub CLI installed successfully.")
+        print("> GitHub CLI installed successfully.")
 
 
 def authenticate_gh():
     """Authenticates gh CLI."""
     try:
-        print("Setting up GitHub authentication...")
+        print("> Setting up GitHub authentication...")
         with tempfile.NamedTemporaryFile(mode='w', delete=False) as fd:
             gh_token = getpass.getpass("Tip: you can generate a Personal Access Token here https://github.com/settings/tokens\n"
                                        "The minimum required scopes are 'repo', 'read:org', 'workflow'.\n"
@@ -126,18 +126,18 @@ def initialize_git_repo():
     """Initializes git repository and sets up GitHub repository."""
     try:
         if Path('.git').exists():
-            print(f'A git repo already exists in the current directory!')
+            print(f'> A git repo already exists in the current directory!')
         else:
-            print("Initializing Git repository...")
+            print("> Initializing Git repository...")
             run_command("git config --global init.defaultBranch main")
             run_command("git init")
-            run_command("git add .")
+            run_command("git add -A")
             run_command('git commit -m "init: initial commit from copier-numpy"')
         try:
             run_command("gh repo view")
-            print("GitHub repo is already initialized!")
+            print("> GitHub repo is already initialized!")
         except RuntimeError:
-            print("Creating GitHub repository and pushing code...")
+            print("> Creating GitHub repository and pushing code...")
             pyproj_values = parse_pyproject_toml(keys=["description"])
             run_command(f'gh repo create --public --remote=origin --source=. --push '
                         f'--description="{pyproj_values["description"]}"')
@@ -177,7 +177,7 @@ def initialize_git_repo_settings():
 
 def initialize_pre_commit():
     if Path(".pre-commit-config.yaml").exists():
-        print("Initializing pre-commit config...")
+        print("> Initializing pre-commit config...")
         run_command("pdm run pre-commit install")
 
 
@@ -219,9 +219,13 @@ if __name__ == "__main__":
               }
             }
     """
+    print('===========Running GitHub setup script===========')
     install_gh_cli()
     authenticate_gh()
     add_license_file()
     initialize_git_repo()
     initialize_git_repo_settings()
     initialize_pre_commit()
+    print('===========Here is a summary of your repo===========')
+    run_command('gh repo view', capture_output=False)
+    print('===========GitHub repo is set up successfully!===========')

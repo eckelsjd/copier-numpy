@@ -41,7 +41,7 @@ Follow [this tutorial](https://docs.pypi.org/trusted-publishers/) to enable trus
 ```shell
 pdm bump
 ```
-That's it! Your package will automatically deploy to PyPi and Github with a correctly-versioned `vX.X.X` tag.
+That's it! Your package will automatically deploy to PyPI and GitHub with a correctly-versioned `vX.X.X` tag.
 
 ## See similar
 - [Scientific Python library development](https://github.com/scientific-python/cookie)

@@ -10,8 +10,8 @@
 - [x] Come up with generic template for pytest
 - [x] Automate coverage badge
 - [xx] Look into nox/tox local automated testing over python versions -- can just do this with test matrix in Github actions for PRs only (these additionally can test over multiple platforms, and its automated)
-- [x] pre-commit hook to ruff check and run pytest
-
+- [x] pre-commit hook to ruff check and check pytest status
+- 
 # CI/CD
 - [ ] Look into build caches for github runners. Cache htmlcov from PR test job and use in build docs for coverage report.
 - [x] Look into pre-commit and ruff for automatic linting
