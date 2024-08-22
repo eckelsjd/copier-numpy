@@ -15,7 +15,7 @@
 # CI/CD
 - [ ] Look into build caches for github runners. Cache htmlcov from PR test job and use in build docs for coverage report.
 - [x] Look into pre-commit and ruff for automatic linting
-- [ ] Look into github api to automatically setup remote repo settings from a script/cli
+- [x] Look into github api to automatically setup remote repo settings from a script/cli
 - [x] Look into towncrier/commitizen for automatic changelogs
 - [x] Look into best ways to bump version and vcs tag in a release. Auto generates changelogs and appropriate version based on commit messages.
 - [ ] Look into dependabot
@@ -23,6 +23,7 @@
 # Copier
 - [x] Run an initialization script to install, git init, and push to new remote repo.
 - [x] Newly copied repo should install pre-commit and setup
+- [x] Add license file automatically
 - [ ] Migrate amisc/uqtils to this template and check the usage of `copier update`.
 
 # General workflow
