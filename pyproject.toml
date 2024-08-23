@@ -19,8 +19,7 @@ version_provider = "pep621"
 update_changelog_on_bump = true
 major_version_zero = true
 changelog_file = "CHANGELOG.md"
-annotated_tag = true
-post_bump_hooks = ["git push --follow-tags"]
+post_bump_hooks = ["git push", "git push --tags"]
 
 [tool.pdm]
 distribution = false
