@@ -1,6 +1,6 @@
 [project]
 name = "copier-numpy"
-version = "0.3.1"
+version = "0.3.2"
 description = "Template for a numpy-based scientific computing Python package."
 authors = [
     {name = "Joshua Eckels", email = "eckelsjd@umich.edu"},

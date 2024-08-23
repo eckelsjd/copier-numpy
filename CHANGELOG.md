@@ -1,3 +1,9 @@
+## v0.3.2 (2024-08-23)
+
+### Fix
+
+- **bump**: try non-annotated tags
+
 ## v0.3.1 (2024-08-23)
 
 ### Fix
