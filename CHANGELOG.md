@@ -1,3 +1,9 @@
+## v0.3.3 (2024-08-23)
+
+### Fix
+
+- **bump**: fix release note generation and hopefully pdm cache
+
 ## v0.3.2 (2024-08-23)
 
 ### Fix
