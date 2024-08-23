@@ -6,6 +6,7 @@ import re
 import os
 import getpass
 import json
+import sys
 
 
 PLATFORM = platform.system().lower()
@@ -73,6 +74,14 @@ def install_gh_cli():
 def authenticate_gh():
     """Authenticates gh CLI."""
     try:
+        result = run_command("gh auth status", text=True)
+        if "Logged in to github.com" in result.stdout:
+            print(result)
+            return  # Skip authentication if already logged in
+    except RuntimeError:
+        pass
+
+    try:
         print("> Setting up GitHub authentication...")
         with tempfile.NamedTemporaryFile(mode='w', delete=False) as fd:
             gh_token = getpass.getpass("Tip: you can generate a Personal Access Token here https://github.com/settings/tokens\n"
@@ -107,6 +116,9 @@ def parse_pyproject_toml(keys):
 
 
 def add_license_file():
+    if Path('LICENSE').exists():
+        return
+
     try:
         pyproj_values = parse_pyproject_toml(keys=["license"])
         gh_cmd = f'gh api licenses/{pyproj_values["license"]}'
@@ -118,8 +130,8 @@ def add_license_file():
         license_body = license_data['body']
         with open('LICENSE', 'w') as license_file:
             license_file.write(license_body)
-    except Exception as e:
-        print(f'Problem writing license file: {e}. Skipping...')
+    except:
+        print(f'Problem writing license file. Skipping...')
 
 
 def initialize_git_repo():
@@ -132,16 +144,13 @@ def initialize_git_repo():
             run_command("git config --global init.defaultBranch main")
             run_command("git init")
             run_command("git add -A")
-            run_command('git commit -m "init: initial commit from copier-numpy"')
+            run_command('git commit -m "chore: initial commit from copier-numpy"')
         try:
             run_command("gh repo view")
             print("> GitHub repo is already initialized!")
         except RuntimeError:
             print("> Creating GitHub repository and pushing code...")
-            pyproj_values = parse_pyproject_toml(keys=["description"])
-            run_command(f'gh repo create --public --remote=origin --source=. --push '
-                        f'--description="{pyproj_values["description"]}"')
-            # run_command("git push -u origin main")
+            run_command(f'gh repo create --public --remote=origin --source=. --push')
 
     except Exception as e:
         raise RuntimeError(f"Git setup failed: {e}") from e
@@ -155,10 +164,12 @@ def initialize_git_repo_settings():
             run_command('gh api -X POST "/repos/{owner}/{repo}/pages" -f source="branch:gh-pages"')
 
         # Add Github basic settings
+        pyproj_values = parse_pyproject_toml(keys=["description"])
         topics = [f"--add-topic {topic}" for topic in ["pdm", "python", "copier-template", "numpy"]]
         extra_options = ["--delete-branch-on-merge", "--enable-discussions", "--enable-issues", "--enable-wiki=false",
                          "--enable-projects=false", "--enable-merge-commit=false", "--enable-rebase-merge",
-                         "--enable-squash-merge", "--allow-update-branch"]
+                         "--enable-squash-merge", "--allow-update-branch",
+                         f'--description="{pyproj_values["description"]}"']
         gh_cmd = f'gh repo edit {" ".join(topics)} {" ".join(extra_options)}'
         run_command(gh_cmd)
 
@@ -219,6 +230,11 @@ if __name__ == "__main__":
               }
             }
     """
+    if Path('.git').exists():
+        response = input('> Found an existing .git repository. Do you want to skip GitHub set up? [Y/n]: ')
+        if not response or response.lower().startswith('y'):
+            print('Best of luck out there.')
+            sys.exit(0)
     print('===========Running GitHub setup script===========')
     install_gh_cli()
     authenticate_gh()

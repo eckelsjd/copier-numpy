@@ -49,9 +49,16 @@ jobs:
       with:
         name: python-package-distributions
         path: dist/
+    - uses: actions/checkout@v4
+    - uses: pdm-project/setup-pdm@v4
+      with:
+        cache: true
+    - run: pdm install --dev --no-default
+    - name: Create release notes
+      run: pdm run cz changelog $(pdm run cz version --project) --dry-run > body.md
     - uses: softprops/action-gh-release@v2
       with:
-        body_path: "RELEASE.md"
+        body_path: body.md
         tag_name: ${{ github.ref_name }}
         files: dist/**
       env:

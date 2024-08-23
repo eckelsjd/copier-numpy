@@ -5,7 +5,6 @@ import unicodedata
 from datetime import date
 from pathlib import Path
 import os
-import platform
 
 from jinja2.ext import Extension
 
@@ -32,14 +31,6 @@ def git_user_email(default: str) -> str:
     except subprocess.CalledProcessError:
         pass
     return default
-
-
-def github_setup(os_platform: str) -> str:
-    """Get the web-request cmd to install Github CLI and setup git repo based on system platform."""
-    if os_platform.lower().startswith('win'):
-        return f'powershell -command "(Invoke-WebRequest -Uri {GITHUB_SCRIPT} -UseBasicParsing).Content" | py -'
-    else:
-        return f"curl -sSL {GITHUB_SCRIPT} | python3 -"
 
 
 def slugify(value, separator="-"):
@@ -70,7 +61,6 @@ class TemplateDefaultExtension(Extension):
         environment.globals["git_user_name"] = git_user_name('')
         environment.globals["git_user_email"] = email
         environment.globals["git_username"] = email.split('@')[0]
-        environment.globals["github_setup_cmd"] = github_setup(platform.system())
         environment.globals["github_script"] = GITHUB_SCRIPT
         environment.globals["current_year"] = date.today().year
         environment.globals["project_dir"] = Path(os.getcwd()).resolve().name

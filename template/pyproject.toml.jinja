@@ -8,8 +8,7 @@ authors = [
 dependencies = [
     "numpy>=2.0",
     "scipy>=1.14",
-    "matplotlib>=3.9",
-    "joblib>=1.4"
+    "matplotlib>=3.9"
 ]
 requires-python = "{{ requires_python }}"
 readme = "README.md"
@@ -33,6 +32,9 @@ build-backend = "pdm.backend"
 {% if is_distributable %}distribution = true
 {% else %}distribution = false{% endif %}
 
+[tool.pdm.install]
+cache = true
+
 [tool.ruff.lint]
 select = ['E', 'F', 'I']
 
@@ -47,17 +49,12 @@ version_files = [{% if is_distributable %}"src/{{ import_name }}.__init__.py:__v
 update_changelog_on_bump = true
 tag_format = "v$version"
 changelog_file = "CHANGELOG.md"
-changelog_incremental = true
-changelog_merge_prerelease = true
 major_version_zero = true
 annotated_tag = true
 post_bump_hooks = ["git push --follow-tags"]
 
 [tool.pdm.scripts]
-bump = "cz bump {args} --changelog-to-stdout > RELEASE.md"
-copier = "python _copier_cli.py {args}"
-{% if init_github %}setup_github = '{{ github_setup_cmd }}'
-{% else %}setup_github = 'clear'{% endif %}
+bump = "cz bump {args}"
 {% if is_distributable %}test = "pytest --cov={{ import_name }} --cov-report html:htmlcov tests"{% endif %}
 {% if include_docs %}docs = "mkdocs serve"{% endif %}
 {% if is_distributable %}lint = "ruff check src tests {args}"{% endif %}

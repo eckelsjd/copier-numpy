@@ -25,6 +25,7 @@
 - [x] Newly copied repo should install pre-commit and setup
 - [x] Add license file automatically
 - [ ] Migrate amisc/uqtils to this template and check the usage of `copier update`.
+- [ ] Make sure this all works in linux too
 
 # General workflow
 1. User should be running `pdm test` and `pdm lint` to make sure their code works and is up to snuff.

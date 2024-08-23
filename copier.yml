@@ -25,14 +25,10 @@ _message_after_update: |
 # POST COPY TASKS-------------------------
 _tasks:
   - pdm install
-  - >-
-    {% if init_github %}
-      {% if _copier_conf.os == 'windows' %}
-      powershell -command '(Invoke-WebRequest -Uri {{ github_script }} -UseBasicParsing).Content | pdm run python -'
-      {% else %}
-      curl -sSL {{ github_script }} | pdm run python -
-      {% endif %}
-    {% endif %}
+  - command: powershell -command '(Invoke-WebRequest -Uri {{ github_script }} -UseBasicParsing).Content | pdm run python -'
+    when: "{{ _copier_conf.os == 'windows' and init_github }}"
+  - command: curl -sSL {{ github_script }} | pdm run python -
+    when: "{{ _copier_conf.os in ['linux', 'macos'] and init_github }}"
 
 # PROMPT ---------------------------------
 project_name:

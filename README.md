@@ -12,6 +12,7 @@ Construct a `numpy`-based Python project from scratch for scientific computing a
 
 ## Features
 
+- [Numpy](https://numpy.org/) a basic installation of the holy trifecta :dove: of `numpy, matplotlib, scipy`.
 - [PDM](https://pdm-project.org) for dependency, virtualenv, and package management.
 - [Mkdocs material](https://squidfunk.github.io/mkdocs-material/) for simple, clean, automated, online code documentation.
 - [pre-commit](https://github.com/pre-commit/pre-commit) with [ruff](https://github.com/astral-sh/ruff) integration for code linting and formatting.
@@ -22,18 +23,15 @@ Construct a `numpy`-based Python project from scratch for scientific computing a
 
 ## Quickstart
 ```shell
+# Obviously, have python and git installed
 pip install --user pdm
 pdm self add copier copier-templates-extensions
 
 cd path/to/project
 pdm init --copier gh:eckelsjd/copier-numpy --trust
 ```
-That's it! Follow the questionnaire and then your `numpy`-based scientific computing project is ready to go.
+That's it! Follow the questionnaire and then your `numpy`-based scientific computing project is ready to go. 
 
-You may optionally specify `--vcs-ref` to copy a specific Git version of this template:
-```shell
-pdm init --copier gh:eckelsjd/copier-numpy --trust --vcs-ref=HEAD
-```
 All extra arguments are passed to `copier copy` (you're also welcome to just use `copier` directly).
 
 ## Publishing on PyPI

@@ -12,7 +12,7 @@ jobs:
       - uses: pdm-project/setup-pdm@v4
         with:
           cache: true
-      - run: pdm install -G dev
+      - run: pdm install -G dev --no-default
       - run: pdm run lint
 
   pr-tests:
