@@ -19,6 +19,7 @@ jobs:
     - run: pdm install --no-default --dev
     - name: Create release notes
       run: pdm run cz changelog $(pdm run cz version --project) --dry-run > body.md
+    - run: cat body.md
     - uses: softprops/action-gh-release@v2
       with:
         body_path: body.md

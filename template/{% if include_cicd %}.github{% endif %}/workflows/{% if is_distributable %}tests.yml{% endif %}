@@ -6,6 +6,7 @@ permissions:
   contents: write
 jobs:
   check-lint:
+    name: Lint check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +17,7 @@ jobs:
       - run: pdm run lint
 
   pr-tests:
+    name: PR tests
     runs-on: ${{ matrix.os }}
     needs: check-lint
     strategy:
