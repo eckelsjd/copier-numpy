@@ -24,6 +24,7 @@
 - [x] Run an initialization script to install, git init, and push to new remote repo.
 - [x] Newly copied repo should install pre-commit and setup
 - [x] Add license file automatically
+- [ ] Clean up `setup_github.py` exceptions/failure behavior and printout
 - [ ] Migrate amisc/uqtils to this template and check the usage of `copier update`.
 - [ ] Make sure this all works in linux too
 

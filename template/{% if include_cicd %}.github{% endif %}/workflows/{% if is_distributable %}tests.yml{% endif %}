@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: 3.11
           cache: true
-      - run: pdm install -G dev --no-default
+      - run: pdm sync -G dev --no-default
       - run: pdm run lint
 
   pr-tests:
@@ -33,6 +33,6 @@ jobs:
           cache: true
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
-        run: pdm install -G test
+        run: pdm sync -G test
       - name: Run tests
         run: pdm run -v test

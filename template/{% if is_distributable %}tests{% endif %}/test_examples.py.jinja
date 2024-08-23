@@ -1,0 +1,12 @@
+import numpy as np
+
+import {{ import_name }}
+from {{ import_name }}.example import my_example
+from {{ import_name }}.subpackage.another_example import plot_cosine
+
+
+def test_all_examples():
+    print(f'{{ import_name }} version: { {{ import_name }}.__version__ }')
+    my_example()
+    plot_cosine(np.linspace(0, 1, 100))
+    print(f'Test passed!')

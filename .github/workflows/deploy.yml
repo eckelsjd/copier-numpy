@@ -19,7 +19,7 @@ jobs:
       with:
         python-version: 3.11
         cache: true
-    - run: pdm install
+    - run: pdm sync  # Installs packages from pdm.lock (should be exactly the same every time this is run)
     - name: Create release notes
       run: pdm run cz changelog $(pdm run cz version --project) --dry-run > body.md
     - uses: softprops/action-gh-release@v2

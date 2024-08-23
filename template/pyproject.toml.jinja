@@ -1,6 +1,6 @@
 [project]
 name = "{{ distribution_name }}"
-version = "0.1.0"
+version = "0.0.0"
 description = "{{ project_description }}"
 authors = [
     {name = "{{ author_name }}", email = "{{ author_email }}"},
@@ -19,18 +19,19 @@ classifiers = [
     "Operating System :: OS Independent",
     "Intended Audience :: Science/Research"
 ]
-{% if init_github or include_docs %}
-[project.urls]
-{% if init_github %}Repository = "https://github.com/{{ repository_namespace }}/{{ project_name }}.git"{% endif %}
-{% if include_docs %}Documentation = "https://{{ repository_namespace }}.github.io/{{ project_name }}/"{% endif %}
-{% endif %}
+
+{% if init_github -%}[project.urls]
+Repository = "https://github.com/{{ repository_namespace }}/{{ project_name }}.git"
+{% if include_docs %}Documentation = "https://{{ repository_namespace }}.github.io/{{ project_name }}/"{%- endif %}
+{%- endif %}
+
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm]
 {% if is_distributable %}distribution = true
-{% else %}distribution = false{% endif %}
+{% else %}distribution = false{%- endif %}
 
 [tool.pdm.install]
 cache = true
@@ -42,7 +43,7 @@ select = ['E', 'F', 'I']
 line-length = 120
 extend-exclude = ["*.ipynb"]
 
-[tool.commitizen]
+{% if init_github -%}[tool.commitizen]
 version_scheme = "pep440"
 version_provider = "pep621"
 version_files = [{% if is_distributable %}"src/{{ import_name }}.__init__.py:__version__"{% endif %}]
@@ -51,26 +52,27 @@ tag_format = "v$version"
 changelog_file = "CHANGELOG.md"
 major_version_zero = true
 annotated_tag = true
-post_bump_hooks = ["git push --follow-tags"]
+post_bump_hooks = ["git push --follow-tags"]{%- endif %}
 
 [tool.pdm.scripts]
-bump = "cz bump {args}"
-{% if is_distributable %}test = "pytest --cov={{ import_name }} --cov-report html:htmlcov tests"{% endif %}
-{% if include_docs %}docs = "mkdocs serve"{% endif %}
-{% if is_distributable %}lint = "ruff check src tests {args}"{% endif %}
+{% if init_github %}bump = "cz bump {args}"{%- endif %}
+{% if is_distributable %}test = "pytest --cov={{ import_name }} --cov-report html:htmlcov tests"{%- endif %}
+{% if include_docs %}docs = "mkdocs serve"{%- endif %}
+{% if is_distributable %}lint = "ruff check src tests {args}"{%- endif %}
 
 [tool.pdm.dev-dependencies]
 dev = [
     "copier>=9.3",
+    "copier-templates-extensions>=0.3.0",
     "ruff>=0.6",
-    "pre-commit>=3.8",
-    "commitizen>=3.29"
+    {% if init_github -%}"pre-commit>=3.8",
+    "commitizen>=3.29"{%- endif %}
 ]
-{% if is_distributable %}test = [
+{% if is_distributable -%}test = [
     "pytest>=7.4",
     "pytest-cov>=4.1",
-]{% endif %}
-{% if include_docs %}doc = [
+]{%- endif %}
+{% if include_docs -%}doc = [
     "mkdocs>=1.5",
     "mkdocs-material>=9.5",
     "mkdocstrings[python]>=0.24",
@@ -81,4 +83,4 @@ dev = [
     "mkdocs-git-committers-plugin-2>=2.3",
     "mkdocs-git-revision-date-localized-plugin>=1.2",
     "mkdocs-coverage>=1.0",
-]{% endif %}
+]{%- endif %}

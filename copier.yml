@@ -11,7 +11,7 @@ _message_before_copy: |
   You will be asked a series of questions to generate a 
   tailored project for you.
 _message_after_copy: |
-  You project "{{ project_name }}" has been created successfully!
+  Your project "{{ project_name }}" has been created successfully!
 _message_before_update: |
   Thanks for updating your project using the numpy template.
   
@@ -22,13 +22,28 @@ _message_after_update: |
   Your project "{{ project_name }}" has been updated successfully!
   In case there are any conflicts, please resolve them.
 
-# POST COPY TASKS-------------------------
+# POST COPY TASKS (only on init)-------------------------
 _tasks:
-  - pdm install
-  - command: powershell -command '(Invoke-WebRequest -Uri {{ github_script }} -UseBasicParsing).Content | pdm run python -'
-    when: "{{ _copier_conf.os == 'windows' and init_github }}"
-  - command: curl -sSL {{ github_script }} | pdm run python -
-    when: "{{ _copier_conf.os in ['linux', 'macos'] and init_github }}"
+  - command: "pdm lock"
+    when: "{{ not is_copier_update }}"
+  - command: "pdm install -G dev --no-default"
+    when: "{{ not is_copier_update }}"
+  - command:
+      - 'powershell'
+      - '-command'
+      - >
+         $tempFilePath = [System.IO.Path]::GetTempFileName() + ".py";
+         Invoke-WebRequest -Uri https://raw.githubusercontent.com/eckelsjd/copier-numpy/{{ _copier_conf.vcs_ref_hash }}/setup_github.py -OutFile $tempFilePath;
+         pdm run python $tempFilePath;
+         Remove-Item $tempFilePath;
+    when: "{{ _copier_conf.os == 'windows' and init_github and not is_copier_update }}"
+  - command:
+      - >
+         temp_file=$(mktemp).py;
+         curl -sSL https://raw.githubusercontent.com/eckelsjd/copier-numpy/{{ _copier_conf.vcs_ref_hash }}/setup_github.py --output "$temp_file";
+         pdm run python "$temp_file";
+         rm "$temp_file";
+    when: "{{ _copier_conf.os in ['linux', 'macos'] and init_github and not is_copier_update }}"
 
 # PROMPT ---------------------------------
 project_name:
@@ -65,6 +80,7 @@ distribution_name:
   help: "Your Python package distribution name (for `pip install NAME`):"
   default: "{{ project_name | slugify }}"
   when: "{{ is_distributable }}"
+  validator: "{% if distribution_name | pypi_name_exists %}`{{ distribution_name }}` already exists on https://pypi.org. Please choose a unique package name.{% endif %}"
 
 import_name:
   type: str
@@ -119,11 +135,11 @@ include_docs:
 
 init_github:
   type: bool
-  help: "Do you want to set up a git repository and push to GitHub?"
+  help: "Do you want to include git version control and connect with GitHub?"
   default: true
 
 include_cicd:
   type: bool
-  help: "Do you want to include a CI/CD workflow (e.g. GitHub actions)?"
+  help: "Do you want to include GitHub actions (i.e. CI/CD workflows)?"
   default: false
   when: "{{ init_github }}"

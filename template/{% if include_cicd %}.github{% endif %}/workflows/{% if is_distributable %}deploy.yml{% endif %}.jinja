@@ -54,13 +54,13 @@ jobs:
       with:
         python-version: 3.11
         cache: true
-    - run: pdm install -G dev --no-default
+    - run: pdm sync -G dev --no-default
     - name: Create release notes
       run: pdm run cz changelog $(pdm run cz version --project) --dry-run > body.md
     - uses: softprops/action-gh-release@v2
       with:
         body_path: body.md
-        tag_name: ${{ github.ref_name }}
+        tag_name: {% raw %}${{ github.ref_name }}{% endraw %}
         files: dist/**
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: {% raw %}${{ secrets.GITHUB_TOKEN }}{% endraw %}

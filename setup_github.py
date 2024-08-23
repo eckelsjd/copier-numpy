@@ -1,3 +1,50 @@
+"""This script will:
+
+1) Install Github CLI (if needed)
+2) Authenticate github
+3) Create a license file
+4) Start a local git repo and push to Github (if needed)
+5) Give the Github remote repo some nice settings
+6) Initialize pre-commit hooks in the local repo
+
+TODO (catch possible failures and give useful output messages):
+- Any problems installing gh CLI (and safely exit)
+- Options to detect and change who is logged in to gh CLI (or exit)
+- If license file couldn't be retrieved (but safely continue)
+- If local repo already exists (can still continue)
+- If remote repo already exists (can still continue)
+- If gh-pages already exists (can still continue)
+- If gh descriptions update fail for some reason (can still continue)
+
+!!! Note "Powershell commands"
+    The trick with powershell string parsing is to run subprocess(shlex.split(ps_str), shell=False),
+    where ps_str = f"powershell -command '{inner_cmd}'", and inner_cmd can use double quotes for holding strings
+    with spaces together, e.g. inner_cmd = f'run command --description="My description here"'.
+
+    The way this works:
+    1) shlex.split will give ['powershell', '-command', 'inner_cmd']
+    2) This will always run `inner_cmd` from powershell (not cmd.exe), therefore powershell string format rules apply
+    3) `inner_cmd` can now contain items like "Hello there" with double quotes as if it were running directly in ps
+
+!!! Note "Unallowed rules"
+    The following ruleset rules for branch/tag protection are not supported under free Github:
+        {
+          "type": "tag_name_pattern",
+          "parameters": {
+            "operator": "regex",
+            "pattern": "^v\\d+\\.\\d+\\.\\d+((a|b|rc)\\d*|-(a|b|rc)\\d*)?"
+          }
+        },
+        {
+          "type": "commit_message_pattern",
+          "parameters": {
+            "name": "",
+            "negate": false,
+            "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
+            "operator": "regex"
+          }
+        }
+"""
 import subprocess
 import platform
 import tempfile
@@ -10,9 +57,6 @@ import sys
 
 
 PLATFORM = platform.system().lower()
-LICENSES = ["AFL-3.0", "Apache-2.0", "Artistic-2.0", "BSD-2-Clause", "BSD-3-Clause", "BSD-4-Clause", "BSL-1.0",
-            "CC-BY-4.0", "WTFPL", "ECL-2.0", "EPL-2.0", "EUPL-1.1", "AGPL-3.0", "GPL-2.0", "GPL-3.0", "LGPL-2.1",
-            "LGPL-3.0", "ISC", "LPPL-1.3c", "MS-PL", "MIT", "OSL-3.0", "Unlicense", "Zlib"]
 
 
 def run_command(command, capture_output=True, text=None):
@@ -76,7 +120,6 @@ def authenticate_gh():
     try:
         result = run_command("gh auth status", text=True)
         if "Logged in to github.com" in result.stdout:
-            print(result)
             return  # Skip authentication if already logged in
     except RuntimeError:
         pass
@@ -141,6 +184,7 @@ def initialize_git_repo():
             print(f'> A git repo already exists in the current directory!')
         else:
             print("> Initializing Git repository...")
+            run_command('git config --global --add safe.directory "*"')  # you should be the main/only user on your computer
             run_command("git config --global init.defaultBranch main")
             run_command("git init")
             run_command("git add -A")
@@ -165,7 +209,14 @@ def initialize_git_repo_settings():
     try:
         # Setup github pages
         if Path(".github/workflows/docs.yml").exists():
-            run_command('gh api -X POST "/repos/{owner}/{repo}/pages" -f source="branch:gh-pages"')
+            try:
+                # Create the gh-pages branch and link to Github pages (might fail if it already exists)
+                run_command("git branch gh-pages")
+                run_command("git push --set-upstream origin gh-pages")
+                # run_command('gh api --method POST "/repos/{owner}/{repo}/pages" -f "source[branch]=gh-pages"')
+                # I think pushing the gh-pages branch to remote automatically creates the GitHub pages site
+            except:
+                print('Problem setting up GitHub Pages -- may already exist. Skipping...')
 
         # Add Github basic settings
         pyproj_values = parse_pyproject_toml(keys=["description"])
@@ -197,55 +248,19 @@ def initialize_pre_commit():
 
 
 if __name__ == "__main__":
-    """This script will:
-    1) Install Github CLI (if needed)
-    2) Authenticate github 
-    3) Create a license file
-    4) Start a local git repo and push to Github (if needed)
-    5) Give the Github remote repo some nice settings
-    6) Initialize pre-commit hooks in the local repo
-    
-    !!! Note "Powershell commands"
-        The trick with powershell string parsing is to run subprocess(shlex.split(ps_str), shell=False),
-        where ps_str = f"powershell -command '{inner_cmd}'", and inner_cmd can use double quotes for holding strings 
-        with spaces together, e.g. inner_cmd = f'run command --description="My description here"'.
-    
-        The way this works:
-        1) shlex.split will give ['powershell', '-command', 'inner_cmd']
-        2) This will always run `inner_cmd` from powershell (not cmd.exe), therefore powershell string format rules apply
-        3) `inner_cmd` can now contain items like "Hello there" with double quotes as if it were running directly in ps
-        
-    !!! Note "Unallowed rules"
-        The following ruleset rules for branch/tag protection are not supported under free Github:
-            {
-              "type": "tag_name_pattern",
-              "parameters": {
-                "operator": "regex",
-                "pattern": "^v\\d+\\.\\d+\\.\\d+((a|b|rc)\\d*|-(a|b|rc)\\d*)?"
-              }
-            },
-            {
-              "type": "commit_message_pattern",
-              "parameters": {
-                "name": "",
-                "negate": false,
-                "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\\([\\w\\-\\.]+\\))?(!)?: ([\\w ])+([\\s\\S]*)",
-                "operator": "regex"
-              }
-            }
-    """
     if Path('.git').exists():
         response = input('> Found an existing .git repository. Do you want to skip GitHub set up? [Y/n]: ')
         if not response or response.lower().startswith('y'):
             print('Best of luck out there.')
             sys.exit(0)
-    print('===========Running GitHub setup script===========')
+
+    print('======================Running GitHub setup script======================')
     install_gh_cli()
     authenticate_gh()
     add_license_file()
     initialize_git_repo()
     initialize_git_repo_settings()
     initialize_pre_commit()
-    print('===========Here is a summary of your repo===========')
+    print('======================Here is a summary of your repo======================')
     run_command('gh repo view', capture_output=False)
-    print('===========GitHub repo is set up successfully!===========')
+    print('======================GitHub repo is set up successfully!======================')

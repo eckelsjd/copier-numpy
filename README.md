@@ -12,7 +12,7 @@ Construct a `numpy`-based Python project from scratch for scientific computing a
 
 ## Features
 
-- [Numpy](https://numpy.org/) a basic installation of the holy trifecta :dove: of `numpy, matplotlib, scipy`.
+- [Numpy](https://numpy.org/) a basic installation for the holy trifecta :dove: of `numpy, matplotlib, scipy`.
 - [PDM](https://pdm-project.org) for dependency, virtualenv, and package management.
 - [Mkdocs material](https://squidfunk.github.io/mkdocs-material/) for simple, clean, automated, online code documentation.
 - [pre-commit](https://github.com/pre-commit/pre-commit) with [ruff](https://github.com/astral-sh/ruff) integration for code linting and formatting.
@@ -22,8 +22,8 @@ Construct a `numpy`-based Python project from scratch for scientific computing a
 - [Github actions](https://docs.github.com/en/actions) for automated, build, test, and deployment.
 
 ## Quickstart
+Have python and git installed, then:
 ```shell
-# Obviously, have python and git installed
 pip install --user pdm
 pdm self add copier copier-templates-extensions
 
@@ -34,12 +34,20 @@ That's it! Follow the questionnaire and then your `numpy`-based scientific compu
 
 All extra arguments are passed to `copier copy` (you're also welcome to just use `copier` directly).
 
+***Note:*** The `--trust` flag enables extensions used in this template. Please see [extensions.py](extensions.py) and [setup_github.py](setup_github.py) to make sure you trust this template (*spoiler:* these just add some global template variables and some basic `git` scripting).
+
 ## Publishing on PyPI
 Follow [this tutorial](https://docs.pypi.org/trusted-publishers/) to enable trusted publishing with Github actions. Then, do:
 ```shell
 pdm bump
 ```
 That's it! Your package will automatically deploy to PyPI and GitHub with a correctly-versioned `vX.X.X` tag.
+
+## Updating your project
+```shell
+copier update --trust
+```
+This will update template files in your project with the most recent releases to the `copier-numpy` template. See the [copier docs](https://copier.readthedocs.io/en/stable/updating/) for more info.
 
 ## See similar
 - [Scientific Python library development](https://github.com/scientific-python/cookie)
