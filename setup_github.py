@@ -150,7 +150,12 @@ def initialize_git_repo():
             print("> GitHub repo is already initialized!")
         except RuntimeError:
             print("> Creating GitHub repository and pushing code...")
+            try:
+                run_command(f'git remote rm origin')
+            except:
+                pass  # Just need to make sure the 'origin' remote name is free before pushing
             run_command(f'gh repo create --public --remote=origin --source=. --push')
+            # Need to make sure
 
     except Exception as e:
         raise RuntimeError(f"Git setup failed: {e}") from e
