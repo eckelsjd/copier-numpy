@@ -17,6 +17,9 @@ jobs:
       with:
         cache: true
     - run: pdm install --no-default --dev
+    - run: pdm run cz version --project
+    - run: VAR=$(pdm run cz version --project)
+    - run: pdm run cz changelog $VAR --dry-run
     - name: Create release notes
       run: pdm run cz changelog $(pdm run cz version --project) --dry-run > body.md
     - run: cat body.md
