@@ -11,8 +11,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: pdm-project/setup-pdm@v4
-      with:
-        cache: true
     - run: pdm build
     - uses: actions/upload-artifact@v4
       with:
@@ -50,10 +48,13 @@ jobs:
         name: python-package-distributions
         path: dist/
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - uses: pdm-project/setup-pdm@v4
       with:
+        python-version: 3.11
         cache: true
-    - run: pdm install --dev --no-default
+    - run: pdm install -G dev --no-default
     - name: Create release notes
       run: pdm run cz changelog $(pdm run cz version --project) --dry-run > body.md
     - uses: softprops/action-gh-release@v2

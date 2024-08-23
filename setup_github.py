@@ -155,7 +155,6 @@ def initialize_git_repo():
             except:
                 pass  # Just need to make sure the 'origin' remote name is free before pushing
             run_command(f'gh repo create --public --remote=origin --source=. --push')
-            # Need to make sure
 
     except Exception as e:
         raise RuntimeError(f"Git setup failed: {e}") from e

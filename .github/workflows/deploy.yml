@@ -13,16 +13,15 @@ jobs:
       id-token: write
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
     - uses: pdm-project/setup-pdm@v4
       with:
+        python-version: 3.11
         cache: true
-    - run: pdm install --no-default --dev
-    - run: pdm run cz version --project
-    - run: VAR=$(pdm run cz version --project)
-    - run: pdm run cz changelog $VAR --dry-run
+    - run: pdm install
     - name: Create release notes
       run: pdm run cz changelog $(pdm run cz version --project) --dry-run > body.md
-    - run: cat body.md
     - uses: softprops/action-gh-release@v2
       with:
         body_path: body.md
