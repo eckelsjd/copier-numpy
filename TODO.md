@@ -11,22 +11,22 @@
 - [x] Automate coverage badge
 - [xx] Look into nox/tox local automated testing over python versions -- can just do this with test matrix in Github actions for PRs only (these additionally can test over multiple platforms, and its automated)
 - [x] pre-commit hook to ruff check and check pytest status
-- 
+
 # CI/CD
 - [ ] Look into build caches for github runners. Cache htmlcov from PR test job and use in build docs for coverage report.
 - [x] Look into pre-commit and ruff for automatic linting
 - [x] Look into github api to automatically setup remote repo settings from a script/cli
 - [x] Look into towncrier/commitizen for automatic changelogs
 - [x] Look into best ways to bump version and vcs tag in a release. Auto generates changelogs and appropriate version based on commit messages.
-- [ ] Look into dependabot
+- [xx] Look into dependabot -- not needed right now
 
 # Copier
 - [x] Run an initialization script to install, git init, and push to new remote repo.
 - [x] Newly copied repo should install pre-commit and setup
 - [x] Add license file automatically
-- [ ] Clean up `setup_github.py` exceptions/failure behavior and printout
+- [ ] Option in `setup_github.py` to detect and change who is logged in to gh CLI (or exit)
 - [ ] Migrate amisc/uqtils to this template and check the usage of `copier update`.
-- [ ] Make sure this all works in linux too
+- [x] Make sure this all works in linux too (works on ubuntu at least)
 
 # General workflow
 1. User should be running `pdm test` and `pdm lint` to make sure their code works and is up to snuff.

@@ -52,6 +52,10 @@ def pypi_name_exists(package_name: str) -> bool:
             raise
 
 
+def path_exists(path: str) -> bool:
+    return Path(path).exists()
+
+
 def format_python_version(version: str) -> str:
     """Just return the first x.x version number of a Python PEP508 version specifier"""
     first_version = version.split(",")[0]
@@ -75,7 +79,8 @@ class TemplateDefaultExtension(Extension):
         environment.globals["git_username"] = email.split('@')[0]
         environment.globals["current_year"] = date.today().year
         environment.globals["project_dir"] = Path(os.getcwd()).resolve().name
-        environment.globals["is_copier_update"] = Path('.copier-answers.yml').exists()
+        environment.globals["is_copier_update"] = path_exists(".copier-answers.yml") or path_exists(".copier-answers.yaml")
+        # runs *before* update/copy, so answers.yml will only exist when we are doing copier update
 
         environment.filters["pypi_name_exists"] = pypi_name_exists
         environment.filters["slugify"] = slugify

@@ -10,7 +10,7 @@
 
 Construct a `numpy`-based Python project from scratch for scientific computing and research.
 
-## Features
+## :wrench: Features
 
 - [Numpy](https://numpy.org/) a basic installation for the holy trifecta :dove: of `numpy, matplotlib, scipy`.
 - [PDM](https://pdm-project.org) for dependency, virtualenv, and package management.
@@ -21,7 +21,7 @@ Construct a `numpy`-based Python project from scratch for scientific computing a
 - [Copier](https://github.com/copier-org/copier) for continuously updating project from this original template.
 - [Github actions](https://docs.github.com/en/actions) for automated, build, test, and deployment.
 
-## Quickstart
+## :round_pushpin: Quickstart
 Have python and git installed, then:
 ```shell
 pip install --user pdm
@@ -36,20 +36,20 @@ All extra arguments are passed to `copier copy` (you're also welcome to just use
 
 ***Note:*** The `--trust` flag enables extensions used in this template. Please see [extensions.py](extensions.py) and [setup_github.py](setup_github.py) to make sure you trust this template (*spoiler:* these just add some global template variables and some basic `git` scripting).
 
-## Publishing on PyPI
+## :snake: Publishing on PyPI
 Follow [this tutorial](https://docs.pypi.org/trusted-publishers/) to enable trusted publishing with Github actions. Then, do:
 ```shell
 pdm bump
 ```
 That's it! Your package will automatically deploy to PyPI and GitHub with a correctly-versioned `vX.X.X` tag.
 
-## Updating your project
+## :arrows_counterclockwise: Updating your project
 ```shell
 copier update --trust
 ```
 This will update template files in your project with the most recent releases to the `copier-numpy` template. See the [copier docs](https://copier.readthedocs.io/en/stable/updating/) for more info.
 
-## See similar
+## :link: See similar
 - [Scientific Python library development](https://github.com/scientific-python/cookie)
 - [Copier-pdm](https://github.com/pawamoy/copier-pdm) and the similar [pdm-project](https://github.com/pdm-project/copier-pdm) version
 - [Serious scaffolding](https://github.com/serious-scaffold/ss-python) for Python projects

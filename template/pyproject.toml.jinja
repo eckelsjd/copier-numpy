@@ -55,6 +55,9 @@ annotated_tag = true
 post_bump_hooks = ["git push --follow-tags"]{%- endif %}
 
 [tool.pdm.scripts]
+setup_dev = {composite = ["pdm sync -G dev",
+    {% if init_github %}"pre-commit install --allow-missing-config",{% endif %}
+    {% if install_jupyter %}"nbstripout --install",{% endif %}]}
 {% if init_github %}bump = "cz bump {args}"{%- endif %}
 {% if is_distributable %}test = "pytest --cov={{ import_name }} --cov-report html:htmlcov tests"{%- endif %}
 {% if include_docs %}docs = "mkdocs serve"{%- endif %}
@@ -66,7 +69,8 @@ dev = [
     "copier-templates-extensions>=0.3.0",
     "ruff>=0.6",
     {% if init_github -%}"pre-commit>=3.8",
-    "commitizen>=3.29"{%- endif %}
+    "commitizen>=3.29",{%- endif %}
+    {% if install_jupyter %}"nbstripout>=0.7",{%- endif %}
 ]
 {% if is_distributable -%}test = [
     "pytest>=7.4",
@@ -83,4 +87,7 @@ dev = [
     "mkdocs-git-committers-plugin-2>=2.3",
     "mkdocs-git-revision-date-localized-plugin>=1.2",
     "mkdocs-coverage>=1.0",
+]{%- endif %}
+{% if install_jupyter -%}jupyter = [
+    "jupyterlab>=4.2",
 ]{%- endif %}

@@ -30,6 +30,6 @@ jobs:
           restore-keys: |
             mkdocs-material-
       # Build and push docs to gh-pages branch (triggers doc site publish action)
-      - run: pdm sync
+      - run: pdm sync -G doc -G test
       - run: pdm run test  # to generate coverage report
       - run: pdm run mkdocs gh-deploy --force

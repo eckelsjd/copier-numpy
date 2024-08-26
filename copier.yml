@@ -12,6 +12,8 @@ _message_before_copy: |
   tailored project for you.
 _message_after_copy: |
   Your project "{{ project_name }}" has been created successfully!
+  
+  Run `pdm setup_dev` to initialize a dev environment. Run `pdm install` to add all dependencies.
 _message_before_update: |
   Thanks for updating your project using the numpy template.
   
@@ -26,8 +28,6 @@ _message_after_update: |
 _tasks:
   - command: "pdm lock"
     when: "{{ not is_copier_update }}"
-  - command: "pdm install -G dev --no-default"
-    when: "{{ not is_copier_update }}"
   - command:
       - 'powershell'
       - '-command'
@@ -37,12 +37,11 @@ _tasks:
          pdm run python $tempFilePath;
          Remove-Item $tempFilePath;
     when: "{{ _copier_conf.os == 'windows' and init_github and not is_copier_update }}"
-  - command:
-      - >
-         temp_file=$(mktemp).py;
-         curl -sSL https://raw.githubusercontent.com/eckelsjd/copier-numpy/{{ _copier_conf.vcs_ref_hash }}/setup_github.py --output "$temp_file";
-         pdm run python "$temp_file";
-         rm "$temp_file";
+  - command: > 
+              export temp_file=$(mktemp).py;
+              curl -sSL https://raw.githubusercontent.com/eckelsjd/copier-numpy/{{ _copier_conf.vcs_ref_hash }}/setup_github.py --output "$temp_file";
+              pdm run python "$temp_file";
+              rm "$temp_file";
     when: "{{ _copier_conf.os in ['linux', 'macos'] and init_github and not is_copier_update }}"
 
 # PROMPT ---------------------------------
@@ -143,3 +142,8 @@ include_cicd:
   help: "Do you want to include GitHub actions (i.e. CI/CD workflows)?"
   default: false
   when: "{{ init_github }}"
+
+install_jupyter:
+  type: bool
+  help: "Do you want to install JupyterLab in your project?"
+  default: false
