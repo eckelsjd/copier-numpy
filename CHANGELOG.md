@@ -1,3 +1,9 @@
+## v0.4.0 (2024-08-25)
+
+### Feat
+
+- basic windows setup seems to be working
+
 ## v0.3.3 (2024-08-23)
 
 ### Fix
