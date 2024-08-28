@@ -2,7 +2,7 @@ site_name: {{ project_name }}
 site_url: https://{{ repository_namespace }}.github.io/{{ project_name }}/
 site_author: {{ author_name }}
 repo_name: {{ repository_namespace }}/{{ project_name }}
-repo_url: https://github.com/{{ repository_namespace }}/{{ project_name }}.git
+repo_url: https://github.com/{{ repository_namespace }}/{{ project_name }}
 copyright: Copyright &copy {{ current_year }} {{ author_name }}
 watch: [mkdocs.yml, README.md, CONTRIBUTING.md, CHANGELOG.md, src]
 
@@ -51,6 +51,8 @@ plugins:
             show_symbol_type_heading: true
             show_symbol_type_toc: true
             group_by_category: true
+            show_root_heading: true
+            heading_level: 1
   - coverage:
       html_report_dir: htmlcov
   - git-committers:
@@ -84,16 +86,14 @@ nav:
       - Getting started: start.md
       - Tutorials: tutorials.md
       - How-to Guides: how-to-guides.md
+      - Documentation features: features.md
       {% if is_distributable %}
       - Contributing: contributing.md
       - Coverage report: coverage.md
       - Changelog: changelog.md
       {% endif %}
-  - API reference:
-      - Documentation features: features.md
-      {% if is_distributable %}
-      - {{ import_name }}: reference/index.md  # Must be named "index.md" for section title to be clickable
-      - reference/*         # Wildcard for auto-generated reference pages (gen-files + literate-nav) {% endif %}
+  {% if is_distributable %}
+  - API reference: reference/  # literate-nav + gen-files {% endif %}
   - Theory:
       - Overview: theory.md
 

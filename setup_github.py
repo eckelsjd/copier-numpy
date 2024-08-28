@@ -242,7 +242,7 @@ def initialize_git_repo_settings():
     # Add Github basic settings
     try:
         pyproj_values = parse_pyproject_toml(keys=["description"])
-        topics = [f"--add-topic {topic}" for topic in ["pdm", "python", "copier-template", "numpy"]]
+        topics = [f"--add-topic {topic}" for topic in ["pdm", "python", "numpy"]]
         extra_options = ["--delete-branch-on-merge", "--enable-discussions", "--enable-issues", "--enable-wiki=false",
                          "--enable-projects=false", "--enable-merge-commit=false", "--enable-rebase-merge",
                          "--enable-squash-merge", "--allow-update-branch",
