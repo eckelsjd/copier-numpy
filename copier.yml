@@ -79,7 +79,7 @@ distribution_name:
   help: "Your Python package distribution name (for `pip install NAME`):"
   default: "{{ project_name | slugify }}"
   when: "{{ is_distributable }}"
-  validator: "{% if distribution_name | pypi_name_exists %}`{{ distribution_name }}` already exists on https://pypi.org. Please choose a unique package name.{% endif %}"
+#  validator: "{% if distribution_name | pypi_name_exists %}`{{ distribution_name }}` already exists on https://pypi.org. Please choose a unique package name.{% endif %}"
 
 import_name:
   type: str
