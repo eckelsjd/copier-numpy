@@ -1,3 +1,15 @@
+## v0.5.0 (2024-11-04)
+
+### Feat
+
+- add basic ubuntu setup
+
+### Fix
+
+- __init__ version and gh release action (#3)
+- comment out pypi validation check
+- small bugs in docs and GHA
+
 ## v0.4.0 (2024-08-25)
 
 ### Feat
