@@ -1,3 +1,9 @@
+## v0.5.1 (2024-11-04)
+
+### Fix
+
+- pytest file utf encoding
+
 ## v0.5.0 (2024-11-04)
 
 ### Feat
