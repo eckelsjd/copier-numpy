@@ -4,6 +4,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from coverage import Coverage
+import coverage
 
 PROJECT_DIR = Path(__file__).parent.parent
 PYTEST_STATUS_FILE = PROJECT_DIR / '.pytest_status'
@@ -14,9 +15,13 @@ COVERAGE_FILE = PROJECT_DIR / '.coverage'
 def update_readme_coverage_badge():
     """Update the test coverage (codecov) badge in the README with most recent pytest-cov results."""
     # Get total coverage percentage from .coverage file
-    cov = Coverage(data_file=COVERAGE_FILE)
-    cov.load()
-    total = round(cov.report())
+    try:
+        cov = Coverage(data_file=COVERAGE_FILE)
+        cov.load()
+        total = round(cov.report())
+    except coverage.exceptions.NoDataError:
+        print('No coverage data found. Skipping README update...')
+        return
 
     # Get badge color
     color_bds = [(95, "brightgreen"), (90, "green"), (75, "yellowgreen"), (60, "yellow"), (40, "orange"), (0, "red")]
