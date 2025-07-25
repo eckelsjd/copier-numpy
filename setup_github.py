@@ -82,7 +82,7 @@ def install_gh_cli():
     try:
         run_command("gh --version")
         print("> GitHub CLI is already installed.")
-    except FileNotFoundError:
+    except (FileNotFoundError, RuntimeError) as e:
         print("> Installing GitHub CLI...")
         if PLATFORM == "linux":
             print('> Attempt Linux install of GitHub CLI...')
@@ -112,7 +112,7 @@ def install_gh_cli():
             print('> Attempt Windows install of Github CLI via scoop...')
             try:
                 run_command(f'scoop --version')
-            except FileNotFoundError:
+            except (FileNotFoundError, RuntimeError):
                 run_command('Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser')
                 run_command('Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression')
                 os.environ['PATH'] += (f"{os.pathsep if os.environ['PATH'][-1] != os.pathsep else ''}" +
