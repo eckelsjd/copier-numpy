@@ -10,14 +10,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    {%- if python_manager == 'pdm' %}- uses: pdm-project/setup-pdm@v4
+    {% if python_manager == 'pdm' %}- uses: pdm-project/setup-pdm@v4
       with:
-        cache: true{%- endif %}
+        cache: true{% endif -%}
     {%- if python_manager == 'uv' %}- uses: astral-sh/setup-uv@v7
       with:
         version: "0.10.8"
         enable-cache: true
-    - run: uv python install{%- endif %}
+    - run: uv python install{% endif %}
     - run: {{ python_manager }} build
     - uses: actions/upload-artifact@v4
       with:

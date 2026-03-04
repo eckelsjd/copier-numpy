@@ -18,14 +18,14 @@ jobs:
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      {%- if python_manager == 'pdm' %}- uses: pdm-project/setup-pdm@v4
+      {% if python_manager == 'pdm' %}- uses: pdm-project/setup-pdm@v4
         with:
-          cache: true{%- endif %}
+          cache: true{% endif -%}
       {%- if python_manager == 'uv' %}- uses: astral-sh/setup-uv@v7
         with:
           version: "0.10.8"
           enable-cache: true
-      - run: uv python install{%- endif %}
+      - run: uv python install{% endif %}
       # Build and push docs to gh-pages branch (triggers doc site publish action)
       - run: {{ python_manager }} sync --group doc --group test
       - run: {{ python_manager }} run dev.py test  # to generate coverage report

@@ -39,7 +39,8 @@ cache = true{%- endif %}
 
 {% if python_manager == 'uv' %}
 [tool.uv]
-package = true
+{% if is_distributable %}package = true
+{% else %}package = false{%- endif %}
 
 [build_system]
 requires = ["uv_build>=0.10.8,<0.11.0"]

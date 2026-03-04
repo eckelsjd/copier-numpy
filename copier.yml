@@ -30,13 +30,13 @@ _tasks:
       - >
          $tempFilePath = [System.IO.Path]::GetTempFileName() + ".py";
          Invoke-WebRequest -Uri https://raw.githubusercontent.com/eckelsjd/copier-numpy/{{ _copier_conf.vcs_ref_hash }}/setup_github.py -OutFile $tempFilePath;
-         {{ python_manager }} run python $tempFilePath;
+         {{ python_manager }} run python {% if python_manager == 'uv' %}--no-project{% endif %} $tempFilePath;
          Remove-Item $tempFilePath;
     when: "{{ _copier_conf.os == 'windows' and init_github and _copier_operation == 'copy' and (python_manager | manager_exists) }}"
   - command: > 
               export temp_file=$(mktemp).py;
               curl -sSL https://raw.githubusercontent.com/eckelsjd/copier-numpy/{{ _copier_conf.vcs_ref_hash }}/setup_github.py --output "$temp_file";
-              {{ python_manager }} run python "$temp_file";
+              {{ python_manager }} run python {% if python_manager == 'uv' %}--no-project{% endif %} "$temp_file";
               rm "$temp_file";
     when: "{{ _copier_conf.os in ['linux', 'macos'] and init_github and _copier_operation == 'copy' and (python_manager | manager_exists) }}"
 
