@@ -42,6 +42,6 @@ jobs:
           python-version: {% raw %}${{ matrix.python-version }}{% endraw %}
       - run: uv python install{%- endif %}
       - name: Install dependencies
-        run: {{ python-manager }} sync --group test
+        run: {{ python_manager }} sync --group test
       - name: Run tests
-        run: {{ python-manager }} run dev.py test
+        run: {{ python_manager }} run dev.py test
