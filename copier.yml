@@ -12,8 +12,6 @@ _message_before_copy: |
   tailored project for you.
 _message_after_copy: |
   Your project "{{ project_name }}" has been created successfully!
-  
-  Run `pdm setup_dev` to initialize a dev environment. Run `pdm install` to add all dependencies.
 _message_before_update: |
   Thanks for updating your project using the numpy template.
   
@@ -26,40 +24,46 @@ _message_after_update: |
 
 # POST COPY TASKS (only on init)-------------------------
 _tasks:
-  - command: "pdm lock"
-    when: "{{ not is_copier_update }}"
   - command:
       - 'powershell'
       - '-command'
       - >
          $tempFilePath = [System.IO.Path]::GetTempFileName() + ".py";
          Invoke-WebRequest -Uri https://raw.githubusercontent.com/eckelsjd/copier-numpy/{{ _copier_conf.vcs_ref_hash }}/setup_github.py -OutFile $tempFilePath;
-         pdm run python $tempFilePath;
+         {{ python_manager }} run python $tempFilePath;
          Remove-Item $tempFilePath;
-    when: "{{ _copier_conf.os == 'windows' and init_github and not is_copier_update }}"
+    when: "{{ _copier_conf.os == 'windows' and init_github and _copier_operation == 'copy' and (python_manager | manager_exists) }}"
   - command: > 
               export temp_file=$(mktemp).py;
               curl -sSL https://raw.githubusercontent.com/eckelsjd/copier-numpy/{{ _copier_conf.vcs_ref_hash }}/setup_github.py --output "$temp_file";
-              pdm run python "$temp_file";
+              {{ python_manager }} run python "$temp_file";
               rm "$temp_file";
-    when: "{{ _copier_conf.os in ['linux', 'macos'] and init_github and not is_copier_update }}"
+    when: "{{ _copier_conf.os in ['linux', 'macos'] and init_github and _copier_operation == 'copy' and (python_manager | manager_exists) }}"
 
 # PROMPT ---------------------------------
 project_name:
   type: str
   help: "Enter your project name:"
-  default: "{{ project_dir }}"
+  default: "{{ _folder_name }}"
 
 project_description:
   type: str
   help: "Enter a project description:"
 
-author_name:
+python_manager:
+  type: str
+  help: "Which Python project manager do you prefer?"
+  default: uv
+  choices:
+    - uv
+    - pdm
+
+user_name:
   type: str
   help: "Enter your full name:"
   default: "{{ git_user_name }}"
 
-author_email:
+user_email:
   type: str
   help: "Enter your email:"
   default: "{{ git_user_email }}"
@@ -67,11 +71,11 @@ author_email:
 repository_namespace:
   type: str
   help: "Enter your repository namespace (e.g. your username/org on GitHub):"
-  default: "{{ git_username }}"
+  default: "{{ github_user }}"
 
 is_distributable:
   type: bool
-  help: "Do you want to build this project as a package for distribution (e.g. pip install)?"
+  help: "Is this a Python library?"
   default: false
 
 distribution_name:
@@ -79,7 +83,6 @@ distribution_name:
   help: "Your Python package distribution name (for `pip install NAME`):"
   default: "{{ project_name | slugify }}"
   when: "{{ is_distributable }}"
-#  validator: "{% if distribution_name | pypi_name_exists %}`{{ distribution_name }}` already exists on https://pypi.org. Please choose a unique package name.{% endif %}"
 
 import_name:
   type: str
