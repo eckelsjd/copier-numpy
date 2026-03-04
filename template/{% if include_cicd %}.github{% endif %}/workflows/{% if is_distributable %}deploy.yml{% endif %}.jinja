@@ -57,7 +57,7 @@ jobs:
       with:
         version: "0.10.8"
         enable-cache: true
-    - uv tool install commitizen
+    - run: uv tool install commitizen
     - name: Create release notes
       run: uv tool run --from commitizen cz changelog $(uv tool run --from commitizen cz version --project) --dry-run > body.md
     - uses: actions/download-artifact@v4

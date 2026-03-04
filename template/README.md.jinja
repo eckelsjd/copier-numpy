@@ -22,10 +22,12 @@
 
 {{ project_description }}
 
-{% if is_distributable %} ## ⚙️ Installation
+{% if is_distributable %}
+## ⚙️ Installation
 ```shell
 pip install {{ distribution_name }}
-```{%- endif %}
+```
+{% endif %}
 
 ## 📍 Quickstart
 ```python
@@ -36,8 +38,10 @@ import {{ import_name }}
 print('Wow!')
 ```
 
-{% if is_distributable %} ## 🏗️ Contributing
-See the [contribution](https://github.com/{{ repository_namespace }}/{{ project_name }}/blob/main/CONTRIBUTING.md) guidelines.{%- endif %}
+{% if is_distributable %}
+## 🏗️ Contributing
+See the [contribution](https://github.com/{{ repository_namespace }}/{{ project_name }}/blob/main/CONTRIBUTING.md) guidelines.
+{% endif %}
 
 ## Citations
 Include any additional references for your project.
