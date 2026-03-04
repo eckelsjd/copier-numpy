@@ -23,7 +23,7 @@ jobs:
 
   pr-tests:
     name: PR tests
-    runs-on: ${{ matrix.os }}
+    runs-on: {% raw %}${{ matrix.os }}{% endraw %}
     needs: check-lint
     strategy:
       matrix:
