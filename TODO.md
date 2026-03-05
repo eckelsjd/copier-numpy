@@ -25,13 +25,16 @@
 - [x] Newly copied repo should install pre-commit and setup
 - [x] Add license file automatically
 - [ ] Option in `setup_github.py` to detect and change who is logged in to gh CLI (or exit)
-- [ ] Migrate amisc/uqtils to this template and check the usage of `copier update`.
+- [x] Migrate amisc/uqtils to this template and check the usage of `copier update`.
 - [x] Make sure this all works in linux too (works on ubuntu at least)
 
+# Agents
+- [ ] Look into templates for agent skills and configuration.
+
 # General workflow
-1. User should be running `pdm test` and `pdm lint` to make sure their code works and is up to snuff.
+1. User should be running `dev.py test` and `dev.py lint` to make sure their code works and is up to snuff.
 1. `pre-commit` will lint, check for sensitive data, check for an up to date `pytest` run, etc. and check that commit message is formatted correctly. Will block if lint or tests failed. README coverage badge automatically updated after `pytest`.
 1. Then the user manually fixes lint/test errors. Can also use `ruff check --fix` to automatically fix lint errors. No formatting is forced at this time but would be easy with `ruff format`.
 1. On pull request to main, a GHA will run all the `pytest` and `ruff checks` again on multiple versions/platforms.
 1. On commit to main, another test-coverage is generated and read into automatic gh-pages deploy for coverage report.
-1. With a manual `pdm bump`, a new tag/version/release/changelog/build are generated from commit history and released. Uses `commitizen` under the hood to manage this.
+1. With a manual `cz bump`, a new tag/version/release/changelog/build are generated from commit history and released.

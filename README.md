@@ -1,8 +1,8 @@
 # Numpy project template
 [![Python 3.11](https://img.shields.io/badge/python-3.11+-blue.svg?logo=python&logoColor=cccccc)](https://www.python.org/downloads/) 
-[![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm-project.org)
 [![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://squidfunk.github.io/mkdocs-material/)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 ![Code Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?logo=codecov)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
@@ -13,7 +13,7 @@ Construct a `numpy`-based Python project from scratch for scientific computing a
 ## :wrench: Features
 
 - [Numpy](https://numpy.org/) a basic installation for the holy trifecta :dove: of `numpy, matplotlib, scipy`.
-- [PDM](https://pdm-project.org) for dependency, virtualenv, and package management.
+- [pdm](https://pdm-project.org) or [uv](https://docs.astral.sh/uv/) for dependency, virtualenv, and package management.
 - [Mkdocs material](https://squidfunk.github.io/mkdocs-material/) for simple, clean, automated, online code documentation.
 - [pre-commit](https://github.com/pre-commit/pre-commit) with [ruff](https://github.com/astral-sh/ruff) integration for code linting and formatting.
 - [pytest](https://docs.pytest.org/en/stable/index.html#) with [coverage](https://pytest-cov.readthedocs.io/en/latest/) for regression testing and code coverage.
@@ -22,24 +22,23 @@ Construct a `numpy`-based Python project from scratch for scientific computing a
 - [Github actions](https://docs.github.com/en/actions) for automated, build, test, and deployment.
 
 ## :round_pushpin: Quickstart
-Have python and git installed, then:
+Install copier with extensions-
 ```shell
-pip install --user pdm
-pdm self add copier copier-templates-extensions
-
-cd path/to/project
-pdm init --copier gh:eckelsjd/copier-numpy --trust
+pdm self add copier copier-templates-extensions            # pdm, or
+uv tool install copier --with copier-templates-extensions  # uv
 ```
-That's it! Follow the questionnaire and then your `numpy`-based scientific computing project is ready to go. 
-
-All extra arguments are passed to `copier copy` (you're also welcome to just use `copier` directly).
+Then copy the template-
+```shell
+copier copy gh:eckelsjd/copier-numpy <dst_path> --trust
+```
+That's it! Follow the questionnaire and then your `numpy`-based scientific computing project is ready to go.
 
 ***Note:*** The `--trust` flag enables extensions used in this template. Please see [extensions.py](extensions.py) and [setup_github.py](setup_github.py) to make sure you trust this template (*spoiler:* these just add some global template variables and some basic `git` scripting).
 
 ## :snake: Publishing on PyPI
 Follow [this tutorial](https://docs.pypi.org/trusted-publishers/) to enable trusted publishing with Github actions. Then, do:
 ```shell
-pdm bump
+cz bump
 ```
 That's it! Your package will automatically deploy to PyPI and GitHub with a correctly-versioned `vX.X.X` tag.
 

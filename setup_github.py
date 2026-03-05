@@ -59,7 +59,7 @@ def run_command(command, capture_output=True, text=None, shell=False):
         else:
             if not shell:
                 command = shlex.split(command)
-        return subprocess.run(command, capture_output=capture_output, check=True, text=text, shell=shell)
+        return subprocess.run(command, capture_output=capture_output, check=True, text=text, shell=shell, env=os.environ.copy())
     except subprocess.CalledProcessError as e:
         raise RuntimeError(f"Command `{command}` failed with code {e.returncode}: {e}\nError message: {e.stderr}") from e
     except subprocess.SubprocessError as e:
@@ -235,14 +235,14 @@ def initialize_git_repo_settings():
             # Create the gh-pages branch and link to Github pages (might fail if it already exists)
             run_command("git branch gh-pages")
             run_command("git push --set-upstream origin gh-pages")  # automatically creates the GitHub pages site
-            # run_command('gh api --method POST "/repos/{owner}/{repo}/pages" -f "source[branch]=gh-pages"')
+            # run_command('gh api --method POST "/repos/{owner}/{repo}/pages" -f "source`[branch`]=gh-pages"')
         except Exception as e:
             print(f'Problem setting up GitHub Pages: {e}\nSkipping...')
 
     # Add Github basic settings
     try:
         pyproj_values = parse_pyproject_toml(keys=["description"])
-        topics = [f"--add-topic {topic}" for topic in ["pdm", "python", "numpy"]]
+        topics = [f"--add-topic {topic}" for topic in ["python", "numpy"]]
         extra_options = ["--delete-branch-on-merge", "--enable-discussions", "--enable-issues", "--enable-wiki=false",
                          "--enable-projects=false", "--enable-merge-commit=false", "--enable-rebase-merge",
                          "--enable-squash-merge", "--allow-update-branch",

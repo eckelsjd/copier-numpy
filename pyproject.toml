@@ -22,16 +22,7 @@ changelog_file = "CHANGELOG.md"
 annotated_tag = true
 post_bump_hooks = ["git push --follow-tags"]
 
-[tool.pdm]
-distribution = false
-
-[tool.pdm.install]
-cache = true
-
-[tool.pdm.scripts]
-bump = "cz bump {args}"
-
-[tool.pdm.dev-dependencies]
+[dependency-groups]
 dev = [
     "commitizen>=3.29.0",
     "pre-commit>=3.8.0",

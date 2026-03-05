@@ -1,0 +1,33 @@
+name: Docs
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
+jobs:
+  deploy-docs:
+    name: Deploy documentation
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout this repository and cd to project root, set up python and cache
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+      {% if python_manager == 'pdm' %}- uses: pdm-project/setup-pdm@v4
+        with:
+          cache: false
+      - run: pdm lock{% endif -%}
+      {%- if python_manager == 'uv' %}- uses: astral-sh/setup-uv@v7
+        with:
+          version: "0.10.8"
+          enable-cache: true
+      - run: uv python install{% endif %}
+      # Build and push docs to gh-pages branch (triggers doc site publish action)
+      - run: {{ python_manager }} sync --group doc --group test
+      - run: {{ python_manager }} run dev.py test  # to generate coverage report
+      - run: {{ python_manager }} run mkdocs gh-deploy --force

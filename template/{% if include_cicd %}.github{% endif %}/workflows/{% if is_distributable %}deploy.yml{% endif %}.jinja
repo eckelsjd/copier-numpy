@@ -10,8 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: pdm-project/setup-pdm@v4
-    - run: pdm build
+    {% if python_manager == 'pdm' %}- uses: pdm-project/setup-pdm@v4
+      with:
+        cache: false{% endif -%}
+    {%- if python_manager == 'uv' %}- uses: astral-sh/setup-uv@v7
+      with:
+        version: "0.10.8"
+        enable-cache: true
+    - run: uv python install{% endif %}
+    - run: {{ python_manager }} build
     - uses: actions/upload-artifact@v4
       with:
         name: python-package-distributions
@@ -46,13 +53,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - uses: pdm-project/setup-pdm@v4
+    - uses: astral-sh/setup-uv@v7
       with:
-        python-version: 3.11
-        cache: true
-    - run: pdm sync -G dev --no-default
+        version: "0.10.8"
+        enable-cache: true
+    - run: uv tool install commitizen
     - name: Create release notes
-      run: pdm run cz changelog $(pdm run cz version --project) --dry-run > body.md
+      run: uv tool run --from commitizen cz changelog $(uv tool run --from commitizen cz version --project) --dry-run > body.md
     - uses: actions/download-artifact@v4
       with:
         name: python-package-distributions
