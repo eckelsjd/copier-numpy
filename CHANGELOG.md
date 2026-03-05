@@ -1,3 +1,13 @@
+## v0.6.0 (2026-03-04)
+
+### Feat
+
+- add uv support (#7)
+
+### Fix
+
+- fixes #4 github setup bugs
+
 ## v0.5.1 (2024-11-04)
 
 ### Fix
