@@ -235,7 +235,7 @@ def initialize_git_repo_settings():
             # Create the gh-pages branch and link to Github pages (might fail if it already exists)
             run_command("git branch gh-pages")
             run_command("git push --set-upstream origin gh-pages")  # automatically creates the GitHub pages site
-            run_command('gh api --method POST "/repos/{owner}/{repo}/pages" -f "source[branch]=gh-pages"')
+            run_command('gh api --method POST "/repos/{owner}/{repo}/pages" -f "source`[branch`]=gh-pages"')
         except Exception as e:
             print(f'Problem setting up GitHub Pages: {e}\nSkipping...')
 

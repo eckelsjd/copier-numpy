@@ -20,7 +20,7 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
       {% if python_manager == 'pdm' %}- uses: pdm-project/setup-pdm@v4
         with:
-          cache: true{% endif -%}
+          cache: false{% endif -%}
       {%- if python_manager == 'uv' %}- uses: astral-sh/setup-uv@v7
         with:
           version: "0.10.8"

@@ -12,7 +12,7 @@ jobs:
     - uses: actions/checkout@v4
     {% if python_manager == 'pdm' %}- uses: pdm-project/setup-pdm@v4
       with:
-        cache: true{% endif -%}
+        cache: false{% endif -%}
     {%- if python_manager == 'uv' %}- uses: astral-sh/setup-uv@v7
       with:
         version: "0.10.8"
